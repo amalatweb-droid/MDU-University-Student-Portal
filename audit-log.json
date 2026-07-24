@@ -1,0 +1,283 @@
+[
+  {
+    "at": "2026-07-24T15:56:47.781Z",
+    "type": "LOGOUT",
+    "email": "admin@mdu.edu",
+    "detail": "User logout"
+  },
+  {
+    "at": "2026-07-24T15:56:19.135Z",
+    "type": "USER_CREATED",
+    "email": "admin@mdu.edu",
+    "detail": "student account created: klaus.min@mdu.edu"
+  },
+  {
+    "at": "2026-07-24T15:55:53.406Z",
+    "type": "MFA_VERIFIED",
+    "email": "admin@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T15:55:46.321Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "admin@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T15:55:42.772Z",
+    "type": "LOGOUT",
+    "email": "lecturer@mdu.edu",
+    "detail": "User logout"
+  },
+  {
+    "at": "2026-07-24T15:55:18.308Z",
+    "type": "MFA_VERIFIED",
+    "email": "lecturer@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T15:55:11.763Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "lecturer@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T15:55:06.460Z",
+    "type": "LOGOUT",
+    "email": "student@mdu.edu",
+    "detail": "User logout"
+  },
+  {
+    "at": "2026-07-24T15:54:44.701Z",
+    "type": "MFA_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T15:54:32.500Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T15:41:09.422Z",
+    "type": "MFA_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T15:40:47.872Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T15:30:06.016Z",
+    "type": "MFA_VERIFIED",
+    "email": "samira.khan@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T15:29:21.059Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "samira.khan@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T15:29:12.848Z",
+    "type": "LOGOUT",
+    "email": "admin@mdu.edu",
+    "detail": "User logout"
+  },
+  {
+    "at": "2026-07-24T15:29:07.840Z",
+    "type": "USER_CREATED",
+    "email": "admin@mdu.edu",
+    "detail": "lecturer account created: samira.khan@mdu.edu"
+  },
+  {
+    "at": "2026-07-24T15:28:43.724Z",
+    "type": "USER_CREATED",
+    "email": "admin@mdu.edu",
+    "detail": "student account created: amal.johny@mdu.edu"
+  },
+  {
+    "at": "2026-07-24T15:28:05.467Z",
+    "type": "MFA_VERIFIED",
+    "email": "admin@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T15:27:42.316Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "admin@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T13:02:08.641Z",
+    "type": "MFA_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T13:01:54.630Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T13:01:53.178Z",
+    "type": "LOGOUT",
+    "email": "admin@mdu.edu",
+    "detail": "User logout"
+  },
+  {
+    "at": "2026-07-24T13:01:31.381Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T13:01:27.736Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T12:55:07.461Z",
+    "type": "USER_CREATED",
+    "email": "admin@mdu.edu",
+    "detail": "student account created: annamaria.shaji@mdu.edu"
+  },
+  {
+    "at": "2026-07-24T12:53:58.168Z",
+    "type": "MFA_VERIFIED",
+    "email": "admin@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T12:53:49.791Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "admin@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T12:53:35.994Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T12:52:40.915Z",
+    "type": "MFA_VERIFIED",
+    "email": "admin@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T12:52:26.615Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "admin@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T12:17:26.970Z",
+    "type": "MFA_VERIFIED",
+    "email": "admin@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T12:17:01.855Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "admin@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T12:16:56.071Z",
+    "type": "LOGOUT",
+    "email": "lecturer@mdu.edu",
+    "detail": "User logout"
+  },
+  {
+    "at": "2026-07-24T12:16:05.700Z",
+    "type": "MFA_VERIFIED",
+    "email": "lecturer@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T12:15:54.718Z",
+    "type": "FAILED_MFA",
+    "email": "lecturer@mdu.edu",
+    "detail": "Invalid TOTP"
+  },
+  {
+    "at": "2026-07-24T12:15:47.194Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "lecturer@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T12:15:39.306Z",
+    "type": "LOGOUT",
+    "email": "student@mdu.edu",
+    "detail": "User logout"
+  },
+  {
+    "at": "2026-07-24T12:15:36.205Z",
+    "type": "MFA_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T12:15:30.642Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T12:15:29.106Z",
+    "type": "LOGOUT",
+    "email": "student@mdu.edu",
+    "detail": "User logout"
+  },
+  {
+    "at": "2026-07-24T12:15:26.587Z",
+    "type": "MFA_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T12:15:14.749Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T12:13:24.423Z",
+    "type": "MFA_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T12:12:30.275Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T11:59:40.147Z",
+    "type": "MFA_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Google Authenticator TOTP verified"
+  },
+  {
+    "at": "2026-07-24T11:59:08.365Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "email": "student@mdu.edu",
+    "detail": "Awaiting TOTP"
+  },
+  {
+    "at": "2026-07-24T11:58:04.268Z",
+    "type": "LOGIN_PASSWORD_VERIFIED",
+    "detail": "Awaiting TOTP"
+  }
+]

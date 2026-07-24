@@ -1,0 +1,1225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MDU Portal</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+      :root {
+        --b: #2563eb;
+        --g: #10b981;
+        --o: #f97316;
+        --i: #172033;
+        --m: #667085;
+        --l: #e7eaf0;
+        --s: #f8fafc;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font:
+          14px Inter,
+          Arial;
+        color: var(--i);
+        background: var(--s);
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+        border: 0;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .auth {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background:
+          radial-gradient(circle at 85% 15%, #dbeafe 0, transparent 28%),
+          #f8fafc;
+      }
+      .auth-card {
+        width: min(420px, 100%);
+        background: #fff;
+        border: 1px solid var(--l);
+        box-shadow: 0 18px 60px #16264a18;
+        border-radius: 20px;
+        padding: 34px;
+      }
+      .mark {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #2563eb, #4f46e5);
+        color: #fff;
+        border-radius: 13px;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+      }
+      .auth h1 {
+        font-size: 24px;
+        letter-spacing: -0.7px;
+        margin: 20px 0 8px;
+      }
+      .sub {
+        color: var(--m);
+        font-size: 12px;
+        line-height: 1.65;
+        margin: 0;
+      }
+      .label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        margin: 18px 0 7px;
+      }
+      .input {
+        height: 44px;
+        width: 100%;
+        border: 1px solid #d8dee9;
+        border-radius: 9px;
+        padding: 0 12px;
+        outline-color: var(--b);
+      }
+      .primary {
+        width: 100%;
+        height: 44px;
+        background: var(--b);
+        color: #fff;
+        border-radius: 9px;
+        font-weight: 700;
+        margin-top: 20px;
+      }
+      .error {
+        color: #b42318;
+        background: #fff1f0;
+        border: 1px solid #ffdad5;
+        border-radius: 7px;
+        padding: 9px 10px;
+        font-size: 11px;
+        margin-top: 14px;
+      }
+      .demo {
+        margin-top: 18px;
+        background: #f8fafc;
+        border-radius: 9px;
+        padding: 12px;
+        color: #667085;
+        font-size: 10px;
+        line-height: 1.65;
+      }
+      .demo b {
+        color: #344054;
+      }
+      .back {
+        background: none;
+        color: var(--b);
+        font-size: 12px;
+        padding: 0;
+        margin-top: 18px;
+      }
+      .qr {
+        width: 176px;
+        height: 176px;
+        display: block;
+        margin: 22px auto 14px;
+        border-radius: 8px;
+        background: #fff;
+      }
+      .secret {
+        font-family: ui-monospace, monospace;
+        letter-spacing: 0.8px;
+        word-break: break-all;
+        background: #f8fafc;
+        border: 1px dashed #cbd5e1;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 11px;
+        text-align: center;
+        margin-top: 9px;
+      }
+      .timer {
+        font-size: 10px;
+        color: var(--m);
+        text-align: center;
+        margin: 14px;
+      }
+      .app {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 252px 1fr;
+      }
+      .side {
+        background: #fff;
+        border-right: 1px solid var(--l);
+        padding: 23px 13px;
+        display: flex;
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 2px 9px 25px;
+        font-size: 17px;
+        font-weight: 800;
+      }
+      .brand small {
+        font-size: 8px;
+        color: #98a2b3;
+        letter-spacing: 0.7px;
+        display: block;
+        margin-top: 2px;
+      }
+      .navlabel {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: #98a2b3;
+        font-weight: 700;
+        padding: 11px 10px 6px;
+      }
+      .nav {
+        display: grid;
+        gap: 3px;
+      }
+      .nav button {
+        background: none;
+        border-radius: 8px;
+        color: #667085;
+        padding: 10px;
+        text-align: left;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .nav button:hover,
+      .nav button.active {
+        background: #eff6ff;
+        color: var(--b);
+      }
+      .nav i {
+        font-style: normal;
+        display: inline-block;
+        width: 22px;
+      }
+      .user {
+        margin-top: auto;
+        border-top: 1px solid var(--l);
+        padding: 15px 7px 1px;
+        display: flex;
+        gap: 9px;
+        align-items: center;
+      }
+      .avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #dbeafe;
+        color: #1d4ed8;
+        display: grid;
+        place-items: center;
+        font-size: 11px;
+        font-weight: 800;
+      }
+      .user b,
+      .user small {
+        display: block;
+      }
+      .user b {
+        font-size: 11px;
+      }
+      .user small {
+        font-size: 9px;
+        color: var(--m);
+        margin-top: 3px;
+      }
+      .top {
+        height: 70px;
+        background: #fff;
+        border-bottom: 1px solid var(--l);
+        padding: 0 34px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
+      .crumb {
+        font-size: 12px;
+        color: #98a2b3;
+      }
+      .crumb b {
+        color: #344054;
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .search {
+        width: 210px;
+        border: 1px solid var(--l);
+        height: 35px;
+        border-radius: 8px;
+        color: #98a2b3;
+        padding: 10px;
+        font-size: 11px;
+      }
+      .iconbtn {
+        width: 35px;
+        height: 35px;
+        background: white;
+        border: 1px solid var(--l);
+        border-radius: 8px;
+        color: #667085;
+      }
+      .logout {
+        color: #b42318;
+        background: #fff1f0;
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .content {
+        padding: 32px 35px 55px;
+        max-width: 1480px;
+        margin: auto;
+      }
+      .head {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        margin-bottom: 24px;
+      }
+      .head h1 {
+        font-size: 24px;
+        letter-spacing: -0.8px;
+        margin: 0 0 6px;
+      }
+      .head p {
+        margin: 0;
+        color: var(--m);
+        font-size: 12px;
+      }
+      .chip {
+        border: 1px solid #bfdbfe;
+        color: #1d4ed8;
+        background: #eff6ff;
+        border-radius: 20px;
+        padding: 6px 9px;
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .hero {
+        border-radius: 16px;
+        background: linear-gradient(115deg, #143477, #2563eb);
+        min-height: 158px;
+        padding: 27px 30px;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero:after {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border: 1px solid #ffffff33;
+        border-radius: 50%;
+        right: -60px;
+        top: -160px;
+      }
+      .eyebrow {
+        font-size: 10px;
+        color: #cadbff;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        font-weight: 700;
+      }
+      .hero h2 {
+        font-size: 23px;
+        letter-spacing: -0.7px;
+        margin: 10px 0 7px;
+      }
+      .hero p {
+        font-size: 12px;
+        color: #dbeafe;
+        margin: 0;
+        max-width: 480px;
+        line-height: 1.65;
+      }
+      .protected {
+        font-size: 10px;
+        margin-top: 16px;
+        display: inline-block;
+        padding: 6px 8px;
+        background: #ffffff19;
+        border: 1px solid #ffffff26;
+        border-radius: 6px;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin: 23px 0;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid var(--l);
+        border-radius: 13px;
+      }
+      .stat {
+        padding: 17px;
+      }
+      .stathead {
+        display: flex;
+        justify-content: space-between;
+        color: var(--m);
+        font-size: 11px;
+        font-weight: 600;
+      }
+      .stat i {
+        font-style: normal;
+        background: #eff6ff;
+        color: var(--b);
+        padding: 6px;
+        border-radius: 7px;
+      }
+      .num {
+        font-size: 25px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin: 16px 0 6px;
+      }
+      .hint {
+        font-size: 10px;
+        color: #059669;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1.55fr 1fr;
+        gap: 16px;
+      }
+      .cardhead {
+        padding: 18px 19px 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .cardhead h3 {
+        font-size: 13px;
+        margin: 0;
+      }
+      .cardhead a {
+        color: var(--b);
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .table th {
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #98a2b3;
+        text-align: left;
+        padding: 10px 19px;
+        border-top: 1px solid var(--l);
+        border-bottom: 1px solid var(--l);
+      }
+      .table td {
+        padding: 14px 19px;
+        border-bottom: 1px solid #f0f2f6;
+        font-size: 11px;
+        color: #667085;
+      }
+      .table tr:last-child td {
+        border: 0;
+      }
+      .name {
+        color: #344054;
+        font-weight: 700;
+      }
+      .tag {
+        font-size: 9px;
+        font-weight: 700;
+        padding: 4px 7px;
+        border-radius: 10px;
+        background: #ecfdf5;
+        color: #047857;
+      }
+      .stack {
+        display: grid;
+        gap: 16px;
+      }
+      .next {
+        padding: 20px;
+      }
+      .next small {
+        font-size: 10px;
+        color: #7c8aa5;
+      }
+      .next h3 {
+        font-size: 15px;
+        margin: 10px 0 6px;
+      }
+      .next p {
+        font-size: 11px;
+        color: var(--m);
+        margin: 0 0 16px;
+      }
+      .nextfoot {
+        border-top: 1px solid var(--l);
+        padding-top: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 10px;
+        color: var(--m);
+      }
+      .mini {
+        background: var(--b);
+        color: white;
+        border-radius: 7px;
+        padding: 8px 10px;
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .timeline {
+        padding: 1px 19px 14px;
+      }
+      .event {
+        display: flex;
+        gap: 10px;
+        padding: 10px 0;
+      }
+      .event i {
+        font-style: normal;
+        width: 20px;
+        height: 20px;
+        background: #eff6ff;
+        color: var(--b);
+        display: grid;
+        place-items: center;
+        border-radius: 6px;
+        font-size: 10px;
+      }
+      .event b {
+        font-size: 10px;
+        display: block;
+      }
+      .event span {
+        font-size: 9px;
+        color: #98a2b3;
+        display: block;
+        margin-top: 3px;
+      }
+      .pages {
+        padding: 24px;
+      }
+      .pages h2 {
+        margin: 0 0 8px;
+        font-size: 19px;
+      }
+      .pages p {
+        color: var(--m);
+        font-size: 12px;
+      }
+      .notice {
+        padding: 14px;
+        border-radius: 9px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        font-size: 11px;
+        margin: 18px 0;
+      }
+      .list {
+        border-top: 1px solid var(--l);
+        margin-top: 18px;
+      }
+      .list div {
+        display: flex;
+        justify-content: space-between;
+        padding: 13px 0;
+        border-bottom: 1px solid var(--l);
+        font-size: 11px;
+      }
+      .security-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .sec {
+        padding: 20px;
+      }
+      .sec h3 {
+        margin: 0 0 5px;
+        font-size: 13px;
+      }
+      .sec p {
+        font-size: 11px;
+        color: var(--m);
+      }
+      .secrow {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-top: 1px solid var(--l);
+        font-size: 11px;
+      }
+      .ok {
+        color: #047857;
+        background: #ecfdf5;
+        padding: 3px 6px;
+        border-radius: 5px;
+        font-size: 9px;
+        font-weight: 700;
+      }
+      .toast {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        background: #172b4d;
+        color: #fff;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 11px;
+        box-shadow: 0 10px 30px #172b4d44;
+        opacity: 0;
+        transform: translateY(50px);
+        transition: 0.25s;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: none;
+      }
+      @media (max-width: 950px) {
+        .cards {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .grid,
+        .security-grid {
+          grid-template-columns: 1fr;
+        }
+        .search {
+          display: none;
+        }
+      }
+      @media (max-width: 650px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+        .side {
+          display: none;
+        }
+        .top {
+          padding: 0 16px;
+        }
+        .content {
+          padding: 23px 16px;
+        }
+        .cards {
+          gap: 10px;
+        }
+        .stat {
+          padding: 13px;
+        }
+        .num {
+          font-size: 20px;
+        }
+        .head h1 {
+          font-size: 20px;
+        }
+        .hero {
+          padding: 22px;
+        }
+        .table th:nth-child(3),
+        .table td:nth-child(3) {
+          display: none;
+        }
+        .logout {
+          padding: 7px;
+        }
+        .security-grid {
+          display: block;
+        }
+        .security-grid .card + .card {
+          margin-top: 12px;
+        }
+      }
+      .formgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 11px;
+        margin-top: 18px;
+      }
+      .formgrid label {
+        font-size: 10px;
+        font-weight: 700;
+        color: #475467;
+      }
+      .formgrid input,
+      .formgrid select {
+        width: 100%;
+        height: 38px;
+        border: 1px solid #d8dee9;
+        border-radius: 7px;
+        padding: 0 9px;
+        margin-top: 5px;
+        background: #fff;
+      }
+      .formgrid .wide {
+        grid-column: 1/-1;
+      }
+      .manage-actions {
+        display: flex;
+        gap: 6px;
+        justify-content: flex-end;
+      }
+      .subtle {
+        background: #f1f5f9;
+        color: #475467;
+        border-radius: 6px;
+        padding: 6px 7px;
+        font-size: 9px;
+        font-weight: 700;
+      }
+      .danger {
+        background: #fff1f0;
+        color: #b42318;
+      }
+      .okbtn {
+        background: #ecfdf5;
+        color: #047857;
+      }
+      .new-note {
+        font-size: 10px;
+        color: #667085;
+        margin-top: 12px;
+      }
+      .user-status {
+        font-size: 9px;
+        font-weight: 700;
+        border-radius: 10px;
+        padding: 4px 7px;
+        background: #ecfdf5;
+        color: #047857;
+      }
+      .user-status.off {
+        background: #fff1f0;
+        color: #b42318;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="auth" id="login">
+      <form class="auth-card" id="loginform">
+        <div class="mark">M</div>
+        <h1>Welcome to MDU Portal</h1>
+        <p class="sub">Sign in to access your secure university workspace.</p>
+        <label class="label">University email</label
+        ><input
+          class="input"
+          id="email"
+          value="student@mdu.edu"
+          type="email"
+          required
+        /><label class="label">Password</label
+        ><input
+          class="input"
+          id="password"
+          value="Password123!"
+          type="password"
+          required
+        /><button class="primary">Continue securely</button>
+        <div class="error hidden" id="loginerr"></div>
+        <div class="demo">
+          <b>Exam demo accounts</b><br />student@mdu.edu · lecturer@mdu.edu ·
+          admin@mdu.edu<br />All use <b>Password123!</b> and require an
+          authenticator code.
+        </div>
+      </form>
+    </section>
+    <section class="auth hidden" id="mfa">
+      <div class="auth-card">
+        <div class="mark">M</div>
+        <h1>Set up authenticator</h1>
+        <p class="sub">
+          Scan this code with Google Authenticator, Microsoft Authenticator,
+          Authy, or another TOTP app. Then enter the current 6-digit code.
+        </p>
+        <img class="qr" id="qr" alt="Authenticator setup QR code" />
+        <p class="sub" style="text-align: center">
+          No camera? Add this key manually:
+        </p>
+        <div class="secret" id="secret"></div>
+        <div class="timer" id="timer">Code refreshes in 30 seconds</div>
+        <label class="label">6-digit authentication code</label
+        ><input
+          class="input"
+          id="code"
+          inputmode="numeric"
+          maxlength="6"
+          autocomplete="one-time-code"
+          placeholder="000000"
+        /><button class="primary" id="verify">Verify and open portal</button>
+        <div class="error hidden" id="mfaerr"></div>
+        <button class="back" id="back">← Back to sign in</button>
+      </div>
+    </section>
+    <section class="app hidden" id="portal">
+      <aside class="side">
+        <div class="brand">
+          <div
+            class="mark"
+            style="width: 30px; height: 30px; border-radius: 9px"
+          >
+            M
+          </div>
+          <span>MDU Portal<small>METROPOLITAN DIGITAL UNIVERSITY</small></span>
+        </div>
+        <span class="navlabel">Workspace</span>
+        <nav class="nav" id="nav"></nav>
+        <span class="navlabel">Account</span>
+        <nav class="nav">
+          <button data-page="notifications"><i>♧</i>Notifications</button
+          ><button data-page="security"><i>◇</i>Security</button
+          ><button data-page="settings"><i>⚙</i>Settings</button>
+        </nav>
+        <div class="user">
+          <div class="avatar" id="avatar">AS</div>
+          <div><b id="username">Alex Smith</b><small id="dept"></small></div>
+        </div>
+      </aside>
+      <main>
+        <header class="top">
+          <div class="crumb">MDU Portal / <b id="crumb">Dashboard</b></div>
+          <div class="actions">
+            <div class="search">⌕ &nbsp; Search portal</div>
+            <span class="chip">● MFA protected</span
+            ><button class="logout" id="logout">Sign out</button>
+          </div>
+        </header>
+        <div class="content" id="view"></div>
+      </main>
+    </section>
+    <div class="toast" id="toast"></div>
+    <script>
+      let profile,
+        csrf,
+        current = "dashboard";
+      const $ = (x) => document.getElementById(x);
+      const API_BASE = location.port === "3000" ? "" : "http://localhost:3000";
+      const api = async (path, opt = {}) => {
+        let r;
+        try {
+          r = await fetch(API_BASE + path, {
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              ...(csrf ? { "X-CSRF-Token": csrf } : {}),
+            },
+            ...opt,
+          });
+        } catch {
+          throw Error(
+            "The MDU demo server is not reachable. Open http://localhost:3000, not this preview URL.",
+          );
+        }
+        let j = await r.json();
+        if (!r.ok) throw Error(j.error);
+        return j;
+      };
+      const navs = {
+        student: [
+          ["dashboard", "▦", "Dashboard"],
+          ["courses", "▱", "My Courses"],
+          ["grades", "◎", "Grades"],
+          ["attendance", "◷", "Attendance"],
+          ["materials", "▤", "Learning Materials"],
+        ],
+        lecturer: [
+          ["dashboard", "▦", "Dashboard"],
+          ["courses", "▱", "Assigned Courses"],
+          ["students", "♙", "Student List"],
+          ["attendance", "◷", "Attendance"],
+          ["grades", "◎", "Grade Submission"],
+          ["materials", "▤", "Materials"],
+          ["announcements", "✦", "Announcements"],
+        ],
+        admin: [
+          ["dashboard", "▦", "Analytics Dashboard"],
+          ["users", "♙", "User Management"],
+          ["roles", "◇", "Role Management"],
+          ["audit", "▤", "Audit Logs"],
+          ["security", "⚠", "Security Dashboard"],
+          ["settings", "⚙", "Portal Settings"],
+        ],
+      };
+      const roleData = {
+        student: {
+          stats: [
+            ["Current GPA", "3.82", "↑ 0.12 this semester"],
+            ["Registered courses", "5", "All credits confirmed"],
+            ["Attendance", "94%", "Above faculty average"],
+            ["Assignments due", "3", "Next due tomorrow"],
+          ],
+          hero: [
+            "Fall semester · 2026",
+            "You’re on track for a great semester.",
+            "Keep an eye on upcoming assessments and stay connected with course activity.",
+          ],
+          rows: [
+            [
+              "Cloud Security Architecture",
+              "Tue & Thu · 10:30",
+              "76%",
+              "In progress",
+            ],
+            ["Human-Centered AI", "Mon & Wed · 13:00", "64%", "In progress"],
+            ["Applied Cryptography", "Tue · 15:30", "81%", "Excellent"],
+          ],
+          next: [
+            "UP NEXT · TODAY AT 10:30",
+            "Cloud Security Architecture",
+            "Dr. Eleanor Wright · Room B-204",
+          ],
+        },
+        lecturer: {
+          stats: [
+            ["Assigned courses", "4", "2 sessions today"],
+            ["Students enrolled", "186", "Across all courses"],
+            ["Submissions to grade", "28", "Due for review"],
+            ["Attendance average", "91%", "This semester"],
+          ],
+          hero: [
+            "Teaching workspace · Fall 2026",
+            "Your teaching day is well organized.",
+            "Review submissions, publish feedback, and keep your students informed.",
+          ],
+          rows: [
+            [
+              "Cloud Security Architecture",
+              "64 students",
+              "8 modules",
+              "Active",
+            ],
+            ["Applied Cryptography", "42 students", "6 modules", "Active"],
+            [
+              "Secure Systems Design",
+              "39 students",
+              "7 modules",
+              "Review needed",
+            ],
+          ],
+          next: [
+            "UP NEXT · TODAY AT 10:30",
+            "Cloud Security Architecture",
+            "Lecture 06 · Room B-204",
+          ],
+        },
+        admin: {
+          stats: [
+            ["Total students", "12,482", "↑ 4.2% since last term"],
+            ["Active sessions", "1,248", "Within normal range"],
+            ["Failed logins", "17", "↓ 31% this week"],
+            ["Security alerts", "3", "Requires review"],
+          ],
+          hero: [
+            "System operations · live overview",
+            "The MDU portal is operating normally.",
+            "Monitor access health, resolve flagged activity, and keep the campus platform secure.",
+          ],
+          rows: [
+            ["Unusual login pattern", "Frankfurt, DE", "Low risk", "Reviewed"],
+            [
+              "Password reset completed",
+              "Student portal",
+              "Audit logged",
+              "Completed",
+            ],
+            [
+              "Role change request",
+              "Admin console",
+              "Awaiting approval",
+              "Pending",
+            ],
+          ],
+          next: [
+            "SECURITY REVIEW · TODAY AT 11:00",
+            "Weekly security operations review",
+            "MDU IT Services · Executive Room",
+          ],
+        },
+      };
+      function toast(s) {
+        $("toast").textContent = s;
+        $("toast").classList.add("show");
+        setTimeout(() => $("toast").classList.remove("show"), 2500);
+      }
+      function esc(v) {
+        return String(v).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#039;",
+            })[c],
+        );
+      }
+      function renderNav() {
+        let a = [...navs[profile.role], ["profile", "◉", "Profile"]];
+        $("nav").innerHTML = a
+          .map(
+            (x) =>
+              `<button data-page="${x[0]}" class="${current === x[0] ? "active" : ""}"><i>${x[1]}</i>${x[2]}</button>`,
+          )
+          .join("");
+        document.querySelectorAll("[data-page]").forEach(
+          (x) =>
+            (x.onclick = () => {
+              current = x.dataset.page;
+              render();
+            }),
+        );
+      }
+      function dashboard() {
+        let d = roleData[profile.role];
+        return `<div class="head"><div><h1>Good morning, ${esc(profile.name.split(" ")[0])}</h1><p>Thursday, 24 July 2026 · Your academic overview</p></div><span class="chip">Verified session</span></div><section class="hero"><div class="eyebrow">${d.hero[0]}</div><h2>${d.hero[1]}</h2><p>${d.hero[2]}</p><span class="protected">● Multi-factor authentication active · session timeout: 15 minutes</span></section><section class="cards">${d.stats.map((x, i) => `<article class="card stat"><div class="stathead">${x[0]}<i>${["▦", "↗", "◷", "✦"][i]}</i></div><div class="num">${x[1]}</div><div class="hint">${x[2]}</div></article>`).join("")}</section><section class="grid"><article class="card"><div class="cardhead"><h3>${profile.role === "admin" ? "Recent security events" : profile.role === "lecturer" ? "Assigned courses" : "My courses"}</h3><a>View all →</a></div><table class="table"><thead><tr><th>Item</th><th>Schedule / source</th><th>Progress</th><th>Status</th></tr></thead><tbody>${d.rows.map((x) => `<tr><td class="name">${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td><td><span class="tag">${x[3]}</span></td></tr>`).join("")}</tbody></table></article><div class="stack"><article class="card next"><small>${d.next[0]}</small><h3>${d.next[1]}</h3><p>${d.next[2]}</p><div class="nextfoot"><span>In 1 hour 15 min</span><button class="mini" onclick="toast('Secure session opened')">Open</button></div></article><article class="card"><div class="cardhead"><h3>Recent activity</h3><a>See all</a></div><div class="timeline"><div class="event"><i>✓</i><div><b>Authentication event recorded</b><span>MFA challenge passed · just now</span></div></div><div class="event"><i>▣</i><div><b>New portal notification</b><span>Academic services · 2 hours ago</span></div></div><div class="event"><i>◇</i><div><b>Secure session active</b><span>Berlin, DE · this device</span></div></div></div></article></div></section>`;
+      }
+      function generic(page) {
+        let titles = {
+          courses: "Courses",
+          grades: "Grades",
+          attendance: "Attendance",
+          materials: "Learning Materials",
+          students: "Student List",
+          announcements: "Announcements",
+          users: "User Management",
+          roles: "Role Management",
+          notifications: "Notifications",
+          profile: "My Profile",
+          settings: "Settings",
+        };
+        let title = titles[page] || "Portal";
+        let items = {
+          courses: [
+            "Cloud Security Architecture",
+            "Applied Cryptography",
+            "Human-Centered AI",
+          ],
+          grades: [
+            "Cloud Security Architecture — A−",
+            "Applied Cryptography — A",
+            "Human-Centered AI — B+",
+          ],
+          attendance: [
+            "Cloud Security Architecture — 94%",
+            "Applied Cryptography — 96%",
+            "Human-Centered AI — 91%",
+          ],
+          materials: [
+            "Lecture 06: Zero Trust Architecture.pdf",
+            "Applied Cryptography workbook.pdf",
+            "Seminar briefing notes.pdf",
+          ],
+          students: ["Sophia Williams", "Noah Martinez", "Emma Thompson"],
+          announcements: [
+            "Cybersecurity Week registration is open",
+            "Course feedback deadline is Friday",
+            "System maintenance scheduled Sunday",
+          ],
+          users: [
+            "Alex Smith — Student — Active",
+            "Dr. Maya Chen — Lecturer — Active",
+            "Jordan Bennett — Administrator — Active",
+          ],
+          roles: [
+            "Student — 12,482 members",
+            "Lecturer — 386 members",
+            "Administrator — 12 members",
+          ],
+          notifications: [
+            "New assessment feedback is available",
+            "Your attendance record was updated",
+            "Security verification completed",
+          ],
+          profile: [`${profile.name}`, profile.email, profile.department],
+          settings: [
+            "Password — securely hashed",
+            "Two-factor authentication — enabled",
+            "Session timeout — 15 minutes",
+          ],
+        }[page] || ["Record 1", "Record 2", "Record 3"];
+        return `<div class="pages card"><h2>${title}</h2><p>Role-aware portal data for ${esc(profile.role)} accounts.</p><div class="notice">This page is protected by your verified session and role-based access controls.</div><div class="list">${items.map((x, i) => `<div><span class="name">${esc(x)}</span><button class="mini" onclick="toast('${page === "materials" ? "Download started" : page === "settings" ? "Security setting saved" : "Action completed"}')">${page === "materials" ? "Download" : page === "users" ? "Manage" : "View"}</button></div>`).join("")}</div></div>`;
+      }
+      async function usersPage() {
+        let users = [];
+        try {
+          users = (await api("/api/users")).users;
+        } catch (e) {
+          return `<div class="pages card"><h2>User Management</h2><div class="error">${esc(e.message)}</div></div>`;
+        }
+        return `<div class="head"><div><h1>User management</h1><p>Create and manage student, lecturer, and administrator accounts.</p></div><span class="chip">Administrator only</span></div><section class="card pages"><h2>Add a university account</h2><p>New users receive their own authenticator enrollment at first sign-in.</p><form id="create-user" class="formgrid"><label>Full name<input id="new-name" required placeholder="e.g. Samira Khan"></label><label>MDU email<input id="new-email" required type="email" placeholder="samira@mdu.edu"></label><label>Role<select id="new-role"><option value="student">Student</option><option value="lecturer">Lecturer</option><option value="admin">Administrator</option></select></label><label>Department / programme<input id="new-dept" required placeholder="Computer Science"></label><label class="wide">Temporary password<input id="new-password" required minlength="10" value="Password123!" type="password"></label><button class="mini wide" style="width:max-content" type="submit">Create secure account</button></form><div class="new-note">Administrators can add all three roles. Lecturers and students cannot create accounts.</div></section><section class="card" style="margin-top:16px"><div class="cardhead"><h3>All portal accounts</h3><a>${users.length} accounts</a></div><table class="table"><thead><tr><th>User</th><th>Role</th><th>Department</th><th>Status</th><th></th></tr></thead><tbody>${users.map((u) => `<tr><td><span class="name">${esc(u.name)}</span><br><small>${esc(u.email)}</small></td><td>${esc(u.role)}</td><td>${esc(u.department)}</td><td><span class="user-status ${u.active ? "" : "off"}">${u.active ? "ACTIVE" : "DISABLED"}</span></td><td><span class="manage-actions"><button class="subtle" onclick="userAction('${esc(u.email)}','reset')">Reset password</button><button class="subtle ${u.active ? "danger" : "okbtn"}" onclick="userAction('${esc(u.email)}','toggle')">${u.active ? "Disable" : "Enable"}</button></span></td></tr>`).join("")}</tbody></table></section>`;
+      }
+      window.userAction = async (email, action) => {
+        try {
+          let r = await api("/api/users/action", {
+            method: "POST",
+            body: JSON.stringify({ email, action }),
+          });
+          toast(r.message);
+          render();
+        } catch (e) {
+          toast(e.message);
+        }
+      };
+      async function security() {
+        let audits = [];
+        if (profile.role === "admin") {
+          try {
+            audits = (await api("/api/audit")).rows;
+          } catch (e) {
+            toast(e.message);
+          }
+        }
+        return `<div class="head"><div><h1>Security center</h1><p>Security status, session protection, and audit visibility.</p></div><span class="chip">● All systems operational</span></div><section class="security-grid"><article class="card sec"><h3>Account protection</h3><p>Authentication and session safeguards active for this portal account.</p><div class="secrow"><span>Multi-factor authentication</span><b class="ok">ENABLED</b></div><div class="secrow"><span>Session timeout</span><span>15 minutes inactivity</span></div><div class="secrow"><span>Cookie policy</span><span>HttpOnly · SameSite=Strict</span></div><div class="secrow"><span>CSRF protection</span><b class="ok">ACTIVE</b></div></article><article class="card sec"><h3>${profile.role === "admin" ? "Risk demonstration" : "Login activity"}</h3><p>${profile.role === "admin" ? "Live simulated security telemetry for your IT Security exam demonstration." : "Account activity from this secure browser session."}</p><div class="secrow"><span>Active sessions</span><b>${profile.role === "admin" ? "1,248" : "1"}</b></div><div class="secrow"><span>Failed login attempts</span><b>${profile.role === "admin" ? "17" : "0"}</b></div><div class="secrow"><span>Blocked SQL injection attempts</span><b>${profile.role === "admin" ? "4" : "0"}</b></div><div class="secrow"><span>Suspicious locations</span><b>${profile.role === "admin" ? "2" : "0"}</b></div></article></section>${
+          profile.role === "admin"
+            ? `<article class="card pages" style="margin-top:16px"><h2>Recent audit logs</h2><div class="list">${
+                audits
+                  .slice(0, 8)
+                  .map(
+                    (x) =>
+                      `<div><span><b>${esc(x.type)}</b><br><small>${esc(x.email)} · ${new Date(x.at).toLocaleString()}</small></span><span>${esc(x.detail)}</span></div>`,
+                  )
+                  .join("") || "<div>No audit events yet</div>"
+              }</div></article>`
+            : ""
+        }`;
+      }
+      async function render() {
+        renderNav();
+        $("crumb").textContent = current[0].toUpperCase() + current.slice(1);
+        $("view").innerHTML =
+          current === "dashboard"
+            ? dashboard()
+            : current === "security" || current === "audit"
+              ? await security()
+              : current === "users"
+                ? await usersPage()
+                : generic(current);
+        let form = $("create-user");
+        if (form)
+          form.onsubmit = async (e) => {
+            e.preventDefault();
+            try {
+              let r = await api("/api/users", {
+                method: "POST",
+                body: JSON.stringify({
+                  name: $("new-name").value,
+                  email: $("new-email").value,
+                  role: $("new-role").value,
+                  department: $("new-dept").value,
+                  password: $("new-password").value,
+                }),
+              });
+              toast(`${r.user.name} added securely`);
+              render();
+            } catch (err) {
+              toast(err.message);
+            }
+          };
+      }
+      async function login(e) {
+        e.preventDefault();
+        $("loginerr").classList.add("hidden");
+        try {
+          let r = await api("/api/login", {
+            method: "POST",
+            body: JSON.stringify({
+              email: $("email").value,
+              password: $("password").value,
+            }),
+          });
+          window.setup = r.setup;
+          $("login").classList.add("hidden");
+          $("mfa").classList.remove("hidden");
+          $("secret").textContent = r.setup.secret;
+          $("qr").src =
+            "https://api.qrserver.com/v1/create-qr-code/?size=176x176&data=" +
+            encodeURIComponent(r.setup.otpauth);
+          tick();
+        } catch (e) {
+          $("loginerr").textContent = e.message;
+          $("loginerr").classList.remove("hidden");
+        }
+      }
+      function tick() {
+        let s = 30 - (Math.floor(Date.now() / 1000) % 30);
+        $("timer").textContent = `Code refreshes in ${s} seconds`;
+        setTimeout(tick, 1000);
+      }
+      async function verify() {
+        try {
+          let r = await api("/api/verify-totp", {
+            method: "POST",
+            body: JSON.stringify({ code: $("code").value.replace(/\D/g, "") }),
+          });
+          profile = r.profile;
+          csrf = r.csrf;
+          $("mfa").classList.add("hidden");
+          $("portal").classList.remove("hidden");
+          $("avatar").textContent = profile.name
+            .split(" ")
+            .map((x) => x[0])
+            .slice(0, 2)
+            .join("");
+          $("username").textContent = profile.name;
+          $("dept").textContent = profile.department;
+          render();
+        } catch (e) {
+          $("mfaerr").textContent = e.message;
+          $("mfaerr").classList.remove("hidden");
+        }
+      }
+      $("loginform").onsubmit = login;
+      $("verify").onclick = verify;
+      $("code").onkeydown = (e) => {
+        if (e.key === "Enter") verify();
+      };
+      $("back").onclick = () => {
+        location.href = "http://localhost:3000/";
+      };
+      $("logout").onclick = async () => {
+        try {
+          await api("/api/logout", { method: "POST" });
+        } catch (e) {
+          /* a timed-out session is still safe to leave */
+        } finally {
+          csrf = "";
+          profile = null;
+          location.href = "http://localhost:3000/";
+        }
+      };
+    </script>
+  </body>
+</html>

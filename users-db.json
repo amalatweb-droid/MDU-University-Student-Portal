@@ -1,0 +1,65 @@
+{
+  "student@mdu.edu": {
+    "name": "Alex Smith",
+    "role": "student",
+    "department": "Computer Science · Year 3",
+    "secret": "JBSWY3DPEHPK3PXP",
+    "email": "student@mdu.edu",
+    "passwordHash": "eadc64499fcf4ce7e1bd6b934c86df14b69caf0abc654dcbbb62c5529c53bcf1",
+    "active": true
+  },
+  "lecturer@mdu.edu": {
+    "name": "Dr. Maya Chen",
+    "role": "lecturer",
+    "department": "School of Computing",
+    "secret": "KRSXG5DSNFXGOIDB",
+    "email": "lecturer@mdu.edu",
+    "passwordHash": "eadc64499fcf4ce7e1bd6b934c86df14b69caf0abc654dcbbb62c5529c53bcf1",
+    "active": true
+  },
+  "admin@mdu.edu": {
+    "name": "Jordan Bennett",
+    "role": "admin",
+    "department": "MDU IT Services",
+    "secret": "MFRGGZDFMZTWQ2LK",
+    "email": "admin@mdu.edu",
+    "passwordHash": "eadc64499fcf4ce7e1bd6b934c86df14b69caf0abc654dcbbb62c5529c53bcf1",
+    "active": true
+  },
+  "annamaria.shaji@mdu.edu": {
+    "email": "annamaria.shaji@mdu.edu",
+    "name": "Anna Maria Shaji",
+    "role": "student",
+    "department": "Computer Science",
+    "active": true,
+    "secret": "2HRCM64GMWEQBKYWWXIY",
+    "passwordHash": "eadc64499fcf4ce7e1bd6b934c86df14b69caf0abc654dcbbb62c5529c53bcf1"
+  },
+  "amal.johny@mdu.edu": {
+    "email": "amal.johny@mdu.edu",
+    "name": "Amal Johny",
+    "role": "student",
+    "department": "Computer Science",
+    "active": true,
+    "secret": "P6NOP5GJEPE7EMSD7HPO",
+    "passwordHash": "eadc64499fcf4ce7e1bd6b934c86df14b69caf0abc654dcbbb62c5529c53bcf1"
+  },
+  "samira.khan@mdu.edu": {
+    "email": "samira.khan@mdu.edu",
+    "name": "Samira Khan",
+    "role": "lecturer",
+    "department": "Computer Science",
+    "active": true,
+    "secret": "3VFV4WU24XGFPCISXOKZ",
+    "passwordHash": "eadc64499fcf4ce7e1bd6b934c86df14b69caf0abc654dcbbb62c5529c53bcf1"
+  },
+  "klaus.min@mdu.edu": {
+    "email": "klaus.min@mdu.edu",
+    "name": "Klaus Min",
+    "role": "student",
+    "department": "Computer Science",
+    "active": true,
+    "secret": "E3D72IM45GIIHTYQ5FW4",
+    "passwordHash": "eadc64499fcf4ce7e1bd6b934c86df14b69caf0abc654dcbbb62c5529c53bcf1"
+  }
+}
