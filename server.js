@@ -456,7 +456,8 @@ if (process.env.VERCEL) {
   module.exports = (req, res) => {
     if (req.url.startsWith("/api/")) return cloudApi(req, res);
     res.setHeader("Content-Type", "text/html; charset=utf-8");
-    return res.status(200).send(fs.readFileSync(path.join(ROOT, "index.html")));
+    res.writeHead(200);
+    return res.end(fs.readFileSync(path.join(ROOT, "index.html")));
   };
 } else {
   server.listen(PORT, () =>

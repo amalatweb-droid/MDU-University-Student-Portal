@@ -19,7 +19,7 @@ module.exports = async (req,res) => {
   const origin=req.headers.origin; res.setHeader('Cache-Control','no-store'); if(origin){res.setHeader('Access-Control-Allow-Origin',origin);res.setHeader('Access-Control-Allow-Credentials','true');res.setHeader('Vary','Origin')}
   if(req.method==='OPTIONS'){res.setHeader('Access-Control-Allow-Methods','GET,POST,OPTIONS');res.setHeader('Access-Control-Allow-Headers','Content-Type,X-CSRF-Token');return res.status(204).end()}
   const url=new URL(req.url,'https://portal.local'), path=url.pathname;
-  const json=(s,x)=>res.status(s).json(x);
+  const json=(s,x)=>{res.statusCode=s;res.setHeader('Content-Type','application/json; charset=utf-8');return res.end(JSON.stringify(x))};
   const key=process.env.SUPABASE_SERVICE_ROLE_KEY, base=process.env.SUPABASE_URL;
   if(!key||!base)return json(500,{error:'Server configuration is incomplete. Add Supabase environment variables in Vercel.'});
   const db=async(p,opt={})=>{const r=await fetch(base+'/rest/v1/'+p,{...opt,headers:{apikey:key,Authorization:`Bearer ${key}`,Accept:'application/json','Content-Type':'application/json',Prefer:opt.prefer||'return=representation',...(opt.headers||{})}});const t=await r.text();let d;try{d=JSON.parse(t||'null')}catch{d=t}if(!r.ok)throw Error(d.message||d.error||'Database request failed');return d};
