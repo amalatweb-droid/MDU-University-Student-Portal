@@ -448,6 +448,18 @@ const server = http.createServer(async (req, res) => {
     );
   }
 });
-server.listen(PORT, () =>
-  console.log(`MDU Portal ready at http://localhost:${PORT}`),
-);
+// Vercel may detect a root server.js before the /api folder.  Delegate to the
+// Supabase-backed serverless handler there, rather than starting the local-only
+// file-based demo server in its read-only runtime.
+if (process.env.VERCEL) {
+  const cloudApi = require("./api/index.js");
+  module.exports = (req, res) => {
+    if (req.url.startsWith("/api/")) return cloudApi(req, res);
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    return res.status(200).send(fs.readFileSync(path.join(ROOT, "index.html")));
+  };
+} else {
+  server.listen(PORT, () =>
+    console.log(`MDU Portal ready at http://localhost:${PORT}`),
+  );
+}
