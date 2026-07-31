@@ -826,6 +826,7 @@
       let profile,
         csrf,
         current = "dashboard";
+      let academicCache = { value: null, expiresAt: 0 };
       const $ = (x) => document.getElementById(x);
       const API_BASE = "";
       const api = async (path, opt = {}) => {
@@ -848,6 +849,13 @@
         if (!r.ok) throw Error(j.error);
         return j;
       };
+      const getAcademic = async (force = false) => {
+        if (!force && academicCache.value && academicCache.expiresAt > Date.now()) return academicCache.value;
+        const value = await api("/api/academic");
+        academicCache = { value, expiresAt: Date.now() + 60000 };
+        return value;
+      };
+      const refreshAcademic = () => { academicCache = { value: null, expiresAt: 0 }; };
       const navs = {
         student: [
           ["dashboard", "▦", "Dashboard"],
@@ -1007,7 +1015,7 @@
       async function dashboard() {
         let d = roleData[profile.role];
         try {
-          const live = await api("/api/academic");
+          const live = await getAcademic();
           if (live.role === "admin") d = {...d,stats:[["Total users",String(live.summary.users),`${live.summary.active} active accounts`],["Students",String(live.summary.students),"Live user records"],["Lecturers",String(live.summary.lecturers),"Live user records"],["Active courses",String(live.summary.courses),"Current course catalogue"]]};
           if (live.role === "lecturer") d = {...d,stats:[["Assigned courses",String(live.courses.length),"Live course assignments"],["Enrolled students",String(live.enrollments.length),"Current enrollment records"],["Grades submitted",String(live.grades.length),"Published grade records"],["Attendance records",String(live.attendance.length),"Recorded class attendance"]],rows:live.courses.map(c=>[c.title,c.code,"Live record","Active"])};
           if (live.role === "student") { const avg=live.grades.length?Math.round(live.grades.reduce((n,g)=>n+Number(g.score),0)/live.grades.length):0; const present=live.attendance.filter(a=>a.status==='present').length; d = {...d,stats:[["Grade average",`${avg}%`,"Submitted lecturer grades"],["Enrolled courses",String(live.courses.length),"Current enrolments"],["Attendance",`${present}/${live.attendance.length}`,"Recorded class attendance"],["Materials",String(live.materials.length),"Published course resources"]],rows:live.courses.map(c=>[c.mdu_courses.title,c.course_code,"Live record","Enrolled"])}; }
@@ -1143,7 +1151,7 @@
       };
       async function academicPage(page) {
         let d;
-        try { d = await api("/api/academic"); } catch (e) { return `<div class="pages card"><h2>Academic workspace</h2><div class="error">${esc(e.message)}</div></div>`; }
+        try { d = await getAcademic(); } catch (e) { return `<div class="pages card"><h2>Academic workspace</h2><div class="error">${esc(e.message)}</div></div>`; }
         if (d.role === "student") {
           if (page === "grades") return `<div class="pages card"><h2>My grades</h2><p>Grades submitted by your lecturers.</p><div class="list">${d.grades.map(g=>`<div><span class="name">${esc(g.course_code)} · ${esc(g.letter_grade)}</span><span>${esc(g.score)}%</span></div>`).join("") || '<div>No grades published yet.</div>'}</div></div>`;
           if (page === "attendance") return `<div class="pages card"><h2>My attendance</h2><p>Verified class attendance records.</p><div class="list">${d.attendance.map(a=>`<div><span class="name">${esc(a.course_code)} · ${esc(a.attendance_date)}</span><span class="tag">${esc(a.status)}</span></div>`).join("") || '<div>No attendance recorded yet.</div>'}</div></div>`;
@@ -1152,7 +1160,7 @@
         }
         if (d.role === "lecturer") {
           const courseOpts=d.courses.map(c=>`<option value="${esc(c.code)}">${esc(c.code)} · ${esc(c.title)}</option>`).join("");
-          const studentOpts=d.enrollments.map(e=>`<option value="${esc(e.student_email)}">${esc(e.student_email)} · ${esc(e.course_code)}</option>`).join("");
+          const studentOpts=d.students.map(s=>`<option value="${esc(s.email)}">${esc(s.name)} · ${esc(s.email)}</option>`).join("");
           if (page === "grades") return `<section class="card pages"><h2>Submit grades</h2><p>Grades are saved to the student record and audit log.</p><form id="grade-form" class="formgrid"><label>Course<select id="grade-course">${courseOpts}</select></label><label>Student<select id="grade-student">${studentOpts}</select></label><label>Score<input id="grade-score" type="number" min="0" max="100" step="0.01" required></label><label>Letter grade<input id="grade-letter" placeholder="A-" required></label><button class="mini wide" style="width:max-content">Submit grade</button></form></section>`;
           if (page === "attendance") return `<section class="card pages"><h2>Manage attendance</h2><p>Record daily attendance for students in your assigned courses.</p><form id="attendance-form" class="formgrid"><label>Course<select id="attendance-course">${courseOpts}</select></label><label>Student<select id="attendance-student">${studentOpts}</select></label><label>Date<input id="attendance-date" type="date" value="${new Date().toISOString().slice(0,10)}" required></label><label>Status<select id="attendance-status"><option value="present">Present</option><option value="late">Late</option><option value="absent">Absent</option></select></label><button class="mini wide" style="width:max-content">Save attendance</button></form></section>`;
           if (page === "materials") return `<section class="card pages"><h2>Publish learning material</h2><p>Add a secure HTTPS link to a PDF, slide deck, or other learning resource.</p><form id="material-form" class="formgrid"><label>Course<select id="material-course">${courseOpts}</select></label><label>Title<input id="material-title" required placeholder="Week 7 lecture slides"></label><label class="wide">Secure material link<input id="material-url" required type="url" placeholder="https://..."></label><label class="wide">Description<input id="material-description" placeholder="Optional short description"></label><button class="mini wide" style="width:max-content">Publish material</button></form><div class="new-note">Materials are only published to the selected course and each action is audit logged.</div></section>`;
@@ -1219,7 +1227,7 @@
               toast(err.message);
             }
           };
-        const bindAcademic = (id, endpoint, fields) => { const form=$(id); if(form) form.onsubmit=async e=>{e.preventDefault();try{const r=await api(endpoint,{method:"POST",body:JSON.stringify(Object.fromEntries(fields.map(([key,input])=>[key,$(input).value])))});toast(r.message);render()}catch(err){toast(err.message)}}; };
+        const bindAcademic = (id, endpoint, fields) => { const form=$(id); if(form) form.onsubmit=async e=>{e.preventDefault();try{const r=await api(endpoint,{method:"POST",body:JSON.stringify(Object.fromEntries(fields.map(([key,input])=>[key,$(input).value])))});refreshAcademic();toast(r.message);render()}catch(err){toast(err.message)}}; };
         bindAcademic("grade-form", "/api/academic/grade", [["courseCode","grade-course"],["studentEmail","grade-student"],["score","grade-score"],["letterGrade","grade-letter"]]);
         bindAcademic("attendance-form", "/api/academic/attendance", [["courseCode","attendance-course"],["studentEmail","attendance-student"],["date","attendance-date"],["status","attendance-status"]]);
         bindAcademic("material-form", "/api/academic/material", [["courseCode","material-course"],["title","material-title"],["fileUrl","material-url"],["description","material-description"]]);
