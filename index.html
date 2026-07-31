@@ -725,6 +725,7 @@
         background: #fff1f0;
         color: #b42318;
       }
+      .modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.48);display:grid;place-items:center;padding:18px;z-index:20}.modal-backdrop.hidden{display:none}.modal-box{width:min(520px,100%);background:#fff;border-radius:16px;box-shadow:0 22px 60px rgba(15,23,42,.25);padding:24px}.modal-box h2{margin:0 0 6px;font-size:19px}.modal-box p{margin:0;color:#667085;font-size:12px}.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}.modal-cancel{background:#f1f5f9;color:#475467;border-radius:7px;padding:9px 12px;font-size:11px;font-weight:700}
     </style>
   </head>
   <body>
@@ -820,6 +821,7 @@
       </main>
     </section>
     <div class="toast" id="toast"></div>
+    <div class="modal-backdrop hidden" id="edit-modal" role="dialog" aria-modal="true" aria-labelledby="edit-title"><form class="modal-box" id="edit-user-form"><h2 id="edit-title">Edit user profile</h2><p>Changes are recorded in the administrator audit log.</p><div class="formgrid"><label>University email<input id="edit-email" required type="email"></label><label>Full name<input id="edit-name" required></label><label>Role<select id="edit-role"><option value="student">Student</option><option value="lecturer">Lecturer</option><option value="admin">Administrator</option></select></label><label>Department / programme<input id="edit-department" required></label></div><div class="modal-actions"><button type="button" class="modal-cancel" id="cancel-edit">Cancel</button><button type="submit" class="mini">Save changes</button></div></form></div>
     <script>
       let profile,
         csrf,
@@ -1002,8 +1004,14 @@
             }),
         );
       }
-      function dashboard() {
+      async function dashboard() {
         let d = roleData[profile.role];
+        try {
+          const live = await api("/api/academic");
+          if (live.role === "admin") d = {...d,stats:[["Total users",String(live.summary.users),`${live.summary.active} active accounts`],["Students",String(live.summary.students),"Live user records"],["Lecturers",String(live.summary.lecturers),"Live user records"],["Active courses",String(live.summary.courses),"Current course catalogue"]]};
+          if (live.role === "lecturer") d = {...d,stats:[["Assigned courses",String(live.courses.length),"Live course assignments"],["Enrolled students",String(live.enrollments.length),"Current enrollment records"],["Grades submitted",String(live.grades.length),"Published grade records"],["Attendance records",String(live.attendance.length),"Recorded class attendance"]],rows:live.courses.map(c=>[c.title,c.code,"Live record","Active"])};
+          if (live.role === "student") { const avg=live.grades.length?Math.round(live.grades.reduce((n,g)=>n+Number(g.score),0)/live.grades.length):0; const present=live.attendance.filter(a=>a.status==='present').length; d = {...d,stats:[["Grade average",`${avg}%`,"Submitted lecturer grades"],["Enrolled courses",String(live.courses.length),"Current enrolments"],["Attendance",`${present}/${live.attendance.length}`,"Recorded class attendance"],["Materials",String(live.materials.length),"Published course resources"]],rows:live.courses.map(c=>[c.mdu_courses.title,c.course_code,"Live record","Enrolled"])}; }
+        } catch (e) { /* retain the available dashboard shell if live data is unavailable */ }
         return `<div class="head"><div><h1>Good morning, ${esc(profile.name.split(" ")[0])}</h1><p>Thursday, 24 July 2026 · Your academic overview</p></div><span class="chip">Verified session</span></div><section class="hero"><div class="eyebrow">${d.hero[0]}</div><h2>${d.hero[1]}</h2><p>${d.hero[2]}</p><span class="protected">● Multi-factor authentication active · session timeout: 15 minutes</span></section><section class="cards">${d.stats.map((x, i) => `<article class="card stat"><div class="stathead">${x[0]}<i>${["▦", "↗", "◷", "✦"][i]}</i></div><div class="num">${x[1]}</div><div class="hint">${x[2]}</div></article>`).join("")}</section><section class="grid"><article class="card"><div class="cardhead"><h3>${profile.role === "admin" ? "Recent security events" : profile.role === "lecturer" ? "Assigned courses" : "My courses"}</h3><a>View all →</a></div><table class="table"><thead><tr><th>Item</th><th>Schedule / source</th><th>Progress</th><th>Status</th></tr></thead><tbody>${d.rows.map((x) => `<tr><td class="name">${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td><td><span class="tag">${x[3]}</span></td></tr>`).join("")}</tbody></table></article><div class="stack"><article class="card next"><small>${d.next[0]}</small><h3>${d.next[1]}</h3><p>${d.next[2]}</p><div class="nextfoot"><span>In 1 hour 15 min</span><button class="mini" onclick="toast('Secure session opened')">Open</button></div></article><article class="card"><div class="cardhead"><h3>Recent activity</h3><a>See all</a></div><div class="timeline"><div class="event"><i>✓</i><div><b>Authentication event recorded</b><span>MFA challenge passed · just now</span></div></div><div class="event"><i>▣</i><div><b>New portal notification</b><span>Academic services · 2 hours ago</span></div></div><div class="event"><i>◇</i><div><b>Secure session active</b><span>Berlin, DE · this device</span></div></div></div></article></div></section>`;
       }
       function generic(page) {
@@ -1080,7 +1088,7 @@
           return `<div class="pages card"><h2>User Management</h2><div class="error">${esc(e.message)}</div></div>`;
         }
         window.portalUsers = users;
-        return `<div class="head"><div><h1>User management</h1><p>Create, edit, secure, and remove student, lecturer, and administrator accounts.</p></div><span class="chip">Administrator only</span></div><section class="card pages"><h2>Add a university account</h2><p>New users receive their own authenticator enrollment at first sign-in.</p><form id="create-user" class="formgrid"><label>Full name<input id="new-name" required placeholder="e.g. Samira Khan"></label><label>MDU email<input id="new-email" required type="email" placeholder="samira@mdu.edu"></label><label>Role<select id="new-role"><option value="student">Student</option><option value="lecturer">Lecturer</option><option value="admin">Administrator</option></select></label><label>Department / programme<input id="new-dept" required placeholder="Computer Science"></label><label class="wide">Temporary password<input id="new-password" required minlength="10" value="Password123!" type="password"></label><button class="mini wide" style="width:max-content" type="submit">Create secure account</button></form><div class="new-note">Administrators can add all three roles. Lecturers and students cannot create accounts.</div></section><section class="card" style="margin-top:16px"><div class="cardhead"><h3>All portal accounts</h3><a>${users.length} accounts</a></div><table class="table"><thead><tr><th>User</th><th>Role</th><th>Department</th><th>Status</th><th></th></tr></thead><tbody>${users.map((u) => `<tr><td><span class="name">${esc(u.name)}</span><br><small>${esc(u.email)}</small></td><td>${esc(u.role)}</td><td>${esc(u.department)}</td><td><span class="user-status ${u.active ? "" : "off"}">${u.active ? "ACTIVE" : "DISABLED"}</span></td><td><span class="manage-actions"><button class="subtle" onclick="editUser('${esc(u.email)}')">Edit</button><button class="subtle" onclick="userAction('${esc(u.email)}','reset')">Reset</button><button class="subtle ${u.active ? "danger" : "okbtn"}" onclick="userAction('${esc(u.email)}','toggle')">${u.active ? "Disable" : "Enable"}</button><button class="subtle danger" onclick="deleteUser('${esc(u.email)}')">Delete</button></span></td></tr>`).join("")}</tbody></table></section>`;
+        return `<div class="head"><div><h1>User management</h1><p>Create, edit, secure, and remove student, lecturer, and administrator accounts.</p></div><span class="chip">Administrator only</span></div><section class="card pages"><h2>Add a university account</h2><p>New users receive their own authenticator enrollment at first sign-in.</p><form id="create-user" class="formgrid"><label>Full name<input id="new-name" required placeholder="e.g. Samira Khan"></label><label>MDU email<input id="new-email" required type="email" placeholder="samira@mdu.edu"></label><label>Role<select id="new-role"><option value="student">Student</option><option value="lecturer">Lecturer</option><option value="admin">Administrator</option></select></label><label>Department / programme<input id="new-dept" required placeholder="Computer Science"></label><label class="wide">Temporary password<input id="new-password" required minlength="10" value="Password123!" type="password"></label><button class="mini wide" style="width:max-content" type="submit">Create secure account</button></form><div class="new-note">Administrators can add Students, Lecturers, and additional Administrators. The signed-in super administrator is protected from deletion.</div></section><section class="card" style="margin-top:16px"><div class="cardhead"><h3>All portal accounts</h3><a>${users.length} accounts</a></div><table class="table"><thead><tr><th>User</th><th>Role</th><th>Department</th><th>Status</th><th></th></tr></thead><tbody>${users.map((u) => `<tr><td><span class="name">${esc(u.name)}</span><br><small>${esc(u.email)}</small></td><td>${esc(u.role)}</td><td>${esc(u.department)}</td><td><span class="user-status ${u.active ? "" : "off"}">${u.active ? "ACTIVE" : "DISABLED"}</span></td><td><span class="manage-actions"><button class="subtle" onclick="editUser('${esc(u.email)}')">Edit</button><button class="subtle" onclick="userAction('${esc(u.email)}','reset')">Reset</button><button class="subtle ${u.active ? "danger" : "okbtn"}" onclick="userAction('${esc(u.email)}','toggle')">${u.active ? "Disable" : "Enable"}</button>${u.email === profile.email ? '<button class="subtle" disabled title="The signed-in super administrator cannot be deleted">Protected</button>' : `<button class="subtle danger" onclick="deleteUser('${esc(u.email)}')">Delete</button>`}</span></td></tr>`).join("")}</tbody></table></section>`;
       }
       window.userAction = async (email, action) => {
         try {
@@ -1094,20 +1102,26 @@
           toast(e.message);
         }
       };
-      window.editUser = async (email) => {
+      window.editUser = (email) => {
         const user = (window.portalUsers || []).find((u) => u.email === email);
         if (!user) return toast("User record is no longer available.");
-        const name = prompt("Full name", user.name);
-        if (name === null) return;
-        const department = prompt("Department / programme", user.department);
-        if (department === null) return;
-        const role = prompt("Role: student, lecturer, or admin", user.role);
-        if (role === null) return;
+        $("edit-user-form").dataset.originalEmail = user.email;
+        $("edit-email").value = user.email;
+        $("edit-name").value = user.name;
+        $("edit-department").value = user.department;
+        $("edit-role").value = user.role;
+        $("edit-modal").classList.remove("hidden");
+      };
+      $("cancel-edit").onclick = () => $("edit-modal").classList.add("hidden");
+      $("edit-user-form").onsubmit = async (e) => {
+        e.preventDefault();
+        const email = e.currentTarget.dataset.originalEmail;
         try {
           const r = await api("/api/users/action", {
             method: "POST",
-            body: JSON.stringify({ email, action: "update", name, department, role: role.toLowerCase().trim() }),
+            body: JSON.stringify({ email, newEmail: $("edit-email").value, action: "update", name: $("edit-name").value, department: $("edit-department").value, role: $("edit-role").value }),
           });
+          $("edit-modal").classList.add("hidden");
           toast(r.message);
           render();
         } catch (e) {
@@ -1127,6 +1141,25 @@
           toast(e.message);
         }
       };
+      async function academicPage(page) {
+        let d;
+        try { d = await api("/api/academic"); } catch (e) { return `<div class="pages card"><h2>Academic workspace</h2><div class="error">${esc(e.message)}</div></div>`; }
+        if (d.role === "student") {
+          if (page === "grades") return `<div class="pages card"><h2>My grades</h2><p>Grades submitted by your lecturers.</p><div class="list">${d.grades.map(g=>`<div><span class="name">${esc(g.course_code)} · ${esc(g.letter_grade)}</span><span>${esc(g.score)}%</span></div>`).join("") || '<div>No grades published yet.</div>'}</div></div>`;
+          if (page === "attendance") return `<div class="pages card"><h2>My attendance</h2><p>Verified class attendance records.</p><div class="list">${d.attendance.map(a=>`<div><span class="name">${esc(a.course_code)} · ${esc(a.attendance_date)}</span><span class="tag">${esc(a.status)}</span></div>`).join("") || '<div>No attendance recorded yet.</div>'}</div></div>`;
+          if (page === "materials") return `<div class="pages card"><h2>Learning materials</h2><p>Lecturer-published course resources.</p><div class="list">${d.materials.map(m=>`<div><span><b>${esc(m.title)}</b><br><small>${esc(m.course_code)} · ${esc(m.description)}</small></span><a class="mini" href="${esc(m.file_url)}" target="_blank" rel="noreferrer">Open material</a></div>`).join("") || '<div>No materials available yet.</div>'}</div></div>`;
+          return `<div class="pages card"><h2>My courses</h2><p>Current enrolled courses from MDU records.</p><div class="list">${d.courses.map(c=>`<div><span class="name">${esc(c.mdu_courses.title)}</span><span>${esc(c.course_code)}</span></div>`).join("")}</div></div>`;
+        }
+        if (d.role === "lecturer") {
+          const courseOpts=d.courses.map(c=>`<option value="${esc(c.code)}">${esc(c.code)} · ${esc(c.title)}</option>`).join("");
+          const studentOpts=d.enrollments.map(e=>`<option value="${esc(e.student_email)}">${esc(e.student_email)} · ${esc(e.course_code)}</option>`).join("");
+          if (page === "grades") return `<section class="card pages"><h2>Submit grades</h2><p>Grades are saved to the student record and audit log.</p><form id="grade-form" class="formgrid"><label>Course<select id="grade-course">${courseOpts}</select></label><label>Student<select id="grade-student">${studentOpts}</select></label><label>Score<input id="grade-score" type="number" min="0" max="100" step="0.01" required></label><label>Letter grade<input id="grade-letter" placeholder="A-" required></label><button class="mini wide" style="width:max-content">Submit grade</button></form></section>`;
+          if (page === "attendance") return `<section class="card pages"><h2>Manage attendance</h2><p>Record daily attendance for students in your assigned courses.</p><form id="attendance-form" class="formgrid"><label>Course<select id="attendance-course">${courseOpts}</select></label><label>Student<select id="attendance-student">${studentOpts}</select></label><label>Date<input id="attendance-date" type="date" value="${new Date().toISOString().slice(0,10)}" required></label><label>Status<select id="attendance-status"><option value="present">Present</option><option value="late">Late</option><option value="absent">Absent</option></select></label><button class="mini wide" style="width:max-content">Save attendance</button></form></section>`;
+          if (page === "materials") return `<section class="card pages"><h2>Publish learning material</h2><p>Add a secure HTTPS link to a PDF, slide deck, or other learning resource.</p><form id="material-form" class="formgrid"><label>Course<select id="material-course">${courseOpts}</select></label><label>Title<input id="material-title" required placeholder="Week 7 lecture slides"></label><label class="wide">Secure material link<input id="material-url" required type="url" placeholder="https://..."></label><label class="wide">Description<input id="material-description" placeholder="Optional short description"></label><button class="mini wide" style="width:max-content">Publish material</button></form><div class="new-note">Materials are only published to the selected course and each action is audit logged.</div></section>`;
+          return `<div class="pages card"><h2>Assigned courses</h2><p>Live course assignments.</p><div class="list">${d.courses.map(c=>`<div><span class="name">${esc(c.title)}</span><span>${esc(c.code)}</span></div>`).join("")}</div></div>`;
+        }
+        return `<div class="pages card"><h2>Academic overview</h2><p>Live counts from current university records.</p><div class="list"><div><span class="name">Students</span><span>${d.summary.students}</span></div><div><span class="name">Lecturers</span><span>${d.summary.lecturers}</span></div><div><span class="name">Active accounts</span><span>${d.summary.active}</span></div><div><span class="name">Courses</span><span>${d.summary.courses}</span></div></div></div>`;
+      }
       async function security() {
         let audits = [];
         if (profile.role === "admin") {
@@ -1155,12 +1188,16 @@
         $("crumb").textContent = current[0].toUpperCase() + current.slice(1);
         $("view").innerHTML =
           current === "dashboard"
-            ? dashboard()
+            ? await dashboard()
             : current === "security" || current === "audit"
               ? await security()
               : current === "users"
                 ? await usersPage()
-                : generic(current);
+                : ["courses", "grades", "attendance", "materials"].includes(current)
+                  ? await academicPage(current)
+                  : current === "roles" && profile.role === "admin"
+                    ? await academicPage(current)
+                    : generic(current);
         let form = $("create-user");
         if (form)
           form.onsubmit = async (e) => {
@@ -1182,6 +1219,10 @@
               toast(err.message);
             }
           };
+        const bindAcademic = (id, endpoint, fields) => { const form=$(id); if(form) form.onsubmit=async e=>{e.preventDefault();try{const r=await api(endpoint,{method:"POST",body:JSON.stringify(Object.fromEntries(fields.map(([key,input])=>[key,$(input).value])))});toast(r.message);render()}catch(err){toast(err.message)}}; };
+        bindAcademic("grade-form", "/api/academic/grade", [["courseCode","grade-course"],["studentEmail","grade-student"],["score","grade-score"],["letterGrade","grade-letter"]]);
+        bindAcademic("attendance-form", "/api/academic/attendance", [["courseCode","attendance-course"],["studentEmail","attendance-student"],["date","attendance-date"],["status","attendance-status"]]);
+        bindAcademic("material-form", "/api/academic/material", [["courseCode","material-course"],["title","material-title"],["fileUrl","material-url"],["description","material-description"]]);
       }
       async function login(e) {
         e.preventDefault();
